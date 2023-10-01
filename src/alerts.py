@@ -4,6 +4,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import configparser
+import sys
 import requests
 from retrying import retry
 
@@ -53,7 +54,7 @@ def get_content(component):
 def set_email_title():
     """Function to set email title"""
     if get_content("type") is None:
-        return "No Alerts"
+        sys.exit()
     else:
         return f"Alert: {get_content('type')} {get_content('level')} \
             {get_content('status')}!!!"
@@ -62,7 +63,7 @@ def set_email_title():
 def set_email_summary():
     """Function to set email summary"""
     if get_content("type") is None:
-        return "No Alerts"
+        sys.exit()
     else:
         return f"{set_email_title()}\n\n{get_content('headline')}\
             \n{get_content('description')}"
