@@ -61,16 +61,21 @@ def set_email_title():
 
 
 def set_email_summary():
-    """Function to set email summary"""
+    """Function to set an email summary"""
     if get_content("type") is None:
         sys.exit()
     else:
+        headline = get_content("headline")
+
+    if "dublin" in headline.lower() or "kildare" in headline.lower():
         return f"{set_email_title()}\n\n{get_content('headline')}\
-            \n{get_content('description')}"
+                \n{get_content('description')}"
+    else:
+        sys.exit()
 
 
 def send_alert():
-    """Function to send email"""
+    """Function to send an email"""
     sender_email = s_email
     sender_password = s_password
     receiver_email = r_email
