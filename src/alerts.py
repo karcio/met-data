@@ -67,7 +67,11 @@ def set_email_summary():
     else:
         headline = get_content("headline")
 
-    if "dublin" in headline.lower() or "kildare" in headline.lower():
+    if (
+        "dublin" in headline.lower()
+        or "kildare" in headline.lower()
+        or "leinster" in headline.lower()
+    ):
         return f"{set_email_title()}\n\n{get_content('headline')}\
                 \n{get_content('description')}"
     else:
