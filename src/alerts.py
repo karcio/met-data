@@ -85,7 +85,7 @@ def set_email_summary():
             return f"{set_email_title()}\n\n{get_content('headline')}\
                     \n{get_content('description')}"
         else:
-            logging.info("Data not for selected location")
+            logging.info("Not for selected location")
             sys.exit()
 
 
