@@ -10,7 +10,9 @@ from retrying import retry
 
 
 logging.basicConfig(
-    format="%(asctime)s - %(levelname)s:%(message)s", level=logging.INFO
+    filename="logs/metdata.log",
+    format="%(asctime)s - %(levelname)s:%(message)s",
+    level=logging.INFO,
 )
 
 config = configparser.ConfigParser()
@@ -45,17 +47,21 @@ def get_content(component):
     try:
         if send_request() is not None:
             data = send_request()
+            logging.info("data fetch success")
 
             return data[0][f"{component}"]
     except IndexError:
+        logging.error("Get content - failed")
         return None
 
 
 def set_email_title():
     """Function to set email title"""
     if get_content("type") is None:
+        logging.error("Set title failed")
         sys.exit()
     else:
+        logging.info("Set title success")
         return f"Alert: {get_content('type')} {get_content('level')} \
             {get_content('status')}!!!"
 
@@ -63,19 +69,24 @@ def set_email_title():
 def set_email_summary():
     """Function to set an email summary"""
     if get_content("type") is None:
+        logging.error("Set summary failed")
         sys.exit()
     else:
+        logging.info("Set summary success")
         headline = get_content("headline")
 
-    if (
-        "dublin" in headline.lower()
-        or "kildare" in headline.lower()
-        or "leinster" in headline.lower()
-    ):
-        return f"{set_email_title()}\n\n{get_content('headline')}\
-                \n{get_content('description')}"
-    else:
-        sys.exit()
+        if (
+            "dublin" in headline.lower()
+            or "kildare" in headline.lower()
+            or "leinster" in headline.lower()
+            or "ireland" in headline.lower()
+        ):
+            logging.info("Data for selected location - setting content")
+            return f"{set_email_title()}\n\n{get_content('headline')}\
+                    \n{get_content('description')}"
+        else:
+            logging.info("Data not for selected location")
+            sys.exit()
 
 
 def send_alert():
